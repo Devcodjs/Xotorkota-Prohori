@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebaseConfig'; // Adjust import path
+import toast, { Toaster } from 'react-hot-toast'; // Import react-hot-toast
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
 
@@ -23,24 +23,23 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Successfully logged in - useEffect will handle the redirect
     } catch (error: any) {
       console.error('Login error:', error);
-      // Display user-friendly error messages based on Firebase error codes
+      // Display user-friendly error messages based on Firebase error codes using toast
       switch (error.code) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':
-          setError('Invalid email or password.');
+          toast.error('Invalid email or password.');
           break;
         case 'auth/invalid-email':
-          setError('Invalid email format.');
+          toast.error('Invalid email format.');
           break;
         default:
-          setError('An error occurred during login. Please try again.');
+          toast.error('An error occurred during login. Please try again.');
           break;
       }
     }
@@ -59,6 +58,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-64px)] bg-gray-100"> {/* Adjust min-height based on Navbar height */}
+      <Toaster /> {/* Add Toaster component here */}
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-900">Login to Your Account</h2>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
@@ -90,12 +90,6 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
-          {error && (
-            <div className="text-red-500 text-sm text-center">
-              {error}
-            </div>
-          )}
 
           <div>
             <button

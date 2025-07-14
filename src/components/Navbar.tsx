@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebaseConfig'; // Adjust the import path
+import Image from 'next/image';
 
 const Navbar = () => {
   const [user, loading] = useAuthState(auth);
@@ -24,7 +25,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or Site Title */}
         <Link href="/" className="text-xl font-bold hover:text-blue-200">
-          Aapada Mitra
+          <Image src="/logo.png" alt="Logo" width={50} height={50} />
         </Link>
 
         {/* Navigation Links */}

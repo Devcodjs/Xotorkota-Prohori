@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebaseConfig'; // Adjust import path
+import toast from 'react-hot-toast';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
@@ -45,6 +46,8 @@ const SignupPage = () => {
           setError('An error occurred during signup. Please try again.');
           break;
       }
+    }finally{
+      toast.success('Signup successful!');
     }
   };
 
