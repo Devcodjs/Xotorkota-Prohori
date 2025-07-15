@@ -30,7 +30,7 @@ ${rawReports}`;
       const response = await result.response;
       const text = response.text();
       setSummary(text);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Error generating summary:', e);
       setError('Error generating summary. Please try again.');
       setSummary(null);

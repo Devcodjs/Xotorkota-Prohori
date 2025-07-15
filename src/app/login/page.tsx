@@ -7,6 +7,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebaseConfig'; // Adjust import path
 import toast, { Toaster } from 'react-hot-toast'; // Import react-hot-toast
+import { FirebaseError } from 'firebase/app';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -27,20 +28,22 @@ const LoginPage = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Successfully logged in - useEffect will handle the redirect
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
       // Display user-friendly error messages based on Firebase error codes using toast
-      switch (error.code) {
-        case 'auth/user-not-found':
-        case 'auth/wrong-password':
-          toast.error('Invalid email or password.');
-          break;
-        case 'auth/invalid-email':
-          toast.error('Invalid email format.');
-          break;
-        default:
-          toast.error('An error occurred during login. Please try again.');
-          break;
+      if (error instanceof Error) {
+        switch ((error as FirebaseError).code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            toast.error('Invalid email or password.');
+            break;
+          case 'auth/invalid-email':
+            toast.error('Invalid email format.');
+            break;
+          default:
+            toast.error('An error occurred during login. Please try again.');
+            break;
+        }
       }
     }
   };
@@ -101,7 +104,7 @@ const LoginPage = () => {
           </div>
         </form>
         <div className="text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
             Sign up
           </Link>

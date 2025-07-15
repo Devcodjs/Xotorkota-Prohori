@@ -43,7 +43,7 @@ const ResourcesPage = () => {
       const unsubscribeRequests = onSnapshot(requestsQuery, (snapshot) => {
         const requestsData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...(doc.data() as any)
+          ...(doc.data() as Omit<ResourceRequest, 'id'>)
         })) as ResourceRequest[];
         setResourceRequests(requestsData);
       });
@@ -52,7 +52,7 @@ const ResourcesPage = () => {
       const unsubscribeOffers = onSnapshot(offersQuery, (snapshot) => {
         const offersData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...(doc.data() as any)
+          ...(doc.data() as Omit<ResourceOffer, 'id'>)
         })) as ResourceOffer[];
         setResourceOffers(offersData);
       });
@@ -144,7 +144,7 @@ Which offers are most relevant to my request? Summarize the top 3 most relevant 
       const text = response.text();
       toast.success('Matching results generated!');
       setMatchingResults(text);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error('Error generating AI match:', e);
       toast.error('Error generating match. Please try again.');
       setMatchingResults(null);
@@ -173,7 +173,7 @@ Which requests are most relevant to my offer? Summarize the top 3 most relevant 
         toast.success('Matching results generated!');
         setMatchingResults(text);
       }
-    } catch (e) {
+    } catch (e: unknown) {
       console.error('Error generating AI match:', e);
       toast.error('Error generating match. Please try again.');
       setMatchingResults(null);

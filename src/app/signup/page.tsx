@@ -7,6 +7,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebaseConfig'; // Adjust import path
 import toast from 'react-hot-toast';
+import { FirebaseError } from 'firebase/app';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
@@ -29,22 +30,24 @@ const SignupPage = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       // Successfully signed up - useEffect will handle the redirect
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Signup error:', error);
       // Display user-friendly error messages based on Firebase error codes
-      switch (error.code) {
-        case 'auth/email-already-in-use':
-          setError('The email address is already in use by another account.');
-          break;
-        case 'auth/invalid-email':
-          setError('The email address is not valid.');
-          break;
-        case 'auth/weak-password':
-          setError('The password is too weak (should be at least 6 characters).');
-          break;
-        default:
-          setError('An error occurred during signup. Please try again.');
-          break;
+      if (error instanceof Error) {
+        switch ((error as FirebaseError).code) {
+          case 'auth/email-already-in-use':
+            setError('The email address is already in use by another account.');
+            break;
+          case 'auth/invalid-email':
+            setError('The email address is not valid.');
+            break;
+          case 'auth/weak-password':
+            setError('The password is too weak (should be at least 6 characters).');
+            break;
+          default:
+            setError('An error occurred during signup. Please try again.');
+            break;
+        }
       }
     }finally{
       toast.success('Signup successful!');

@@ -6,7 +6,6 @@ import { collection, onSnapshot, query, orderBy, Timestamp } from 'firebase/fire
 import { db, auth, model } from '@/config/firebaseConfig';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
-import { generateText } from '@/lib/model';
 import { ResourceRequest, ResourceOffer } from '@/types/resources';
 
 interface FloodAlert {
@@ -51,7 +50,7 @@ const HomePage = () => {
       const unsubscribeAlerts = onSnapshot(alertsQuery, (snapshot) => {
         const alertsData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...(doc.data() as any)
+          ...(doc.data() as Omit<FloodAlert, 'id'>)
         })) as FloodAlert[];
         setAlerts(alertsData);
       });
@@ -61,7 +60,7 @@ const HomePage = () => {
       const unsubscribeRequests = onSnapshot(requestsQuery, (snapshot) => {
         const requestsData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...(doc.data() as any)
+          ...(doc.data() as Omit<ResourceRequest, 'id'>)
         })) as ResourceRequest[];
         setResourceRequests(requestsData);
       });
@@ -71,7 +70,7 @@ const HomePage = () => {
       const unsubscribeOffers = onSnapshot(offersQuery, (snapshot) => {
         const offersData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...(doc.data() as any)
+          ...(doc.data() as Omit<ResourceOffer, 'id'>)
         })) as ResourceOffer[];
         setResourceOffers(offersData);
       });
@@ -104,7 +103,7 @@ ${floodReports}`;
       const response = await result.response;
       const text = response.text();
       setSummary(text);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Error generating summary:', e);
       setSummaryError('Error generating summary. Please try again.');
       setSummary(null);
@@ -130,7 +129,7 @@ ${floodReports}`;
 
       <main className="w-full max-w-7xl bg-white p-8 rounded-lg shadow-xl border border-gray-200">
         <h1 className="text-4xl font-bold text-center text-blue-700 mb-10 rounded-md p-2 bg-blue-50 shadow-md">
-          Aapada Mitra: Community Dashboard
+          Aapada Mitra&apos;s: Community Dashboard
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -215,7 +214,7 @@ ${floodReports}`;
           <section className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Resource Requests</h2>
             <p className="text-gray-600 mb-4 text-sm">
-              Community members' needs for various resources.
+              Community members&apos; needs for various resources.
             </p>
             <div className="max-h-96 overflow-y-auto pr-2">
               {resourceRequests.length === 0 ? (

@@ -7,12 +7,12 @@ export async function generateText(prompt: string): Promise<string | undefined> 
     const text = response.text();
     console.log("Generated text:", text);
     return text; // Return the generated text here
-  } catch (e: any) {
-    console.error("Error generating text:", e);
-    // Optionally return undefined or re-throw the error
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      console.error("Error generating text:", e.message);
+    } else {
+      console.error("An unknown error occurred while generating text:", e);
+    }
     return undefined;
   }
 }
-
-// Call the function with a prompt
-// generateText("Tell me a story about a talking cat.");

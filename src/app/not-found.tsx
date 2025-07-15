@@ -1,12 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-
-interface ErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
-}
 
 export default function Error() {
   const router = useRouter();
