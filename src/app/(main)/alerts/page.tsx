@@ -35,7 +35,7 @@ const AlertsPage = () => {
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const alertsData = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data() as any // Cast to any for simplicity, consider a more robust type assertion
+          ...doc.data() as Omit<FloodAlert, 'id'> // Cast to any for simplicity, consider a more robust type assertion
         })) as FloodAlert[];
         setAlerts(alertsData);
       });
