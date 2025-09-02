@@ -123,13 +123,13 @@ ${floodReports}`;
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8 font-inter">
       <Head>
-        <title>Aapada Mitra: Community Dashboard</title>
+        <title>Xotorkota-Prohori: Community Dashboard</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
       </Head>
 
       <main className="w-full max-w-7xl bg-white p-8 rounded-lg shadow-xl border border-gray-200">
         <h1 className="text-4xl font-bold text-center text-blue-700 mb-10 rounded-md p-2 bg-blue-50 shadow-md">
-          Aapada Mitra&apos;s: Community Dashboard
+          Xotorkota-Prohori&apos;s: Community Dashboard
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
