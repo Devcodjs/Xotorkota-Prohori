@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { GoogleAIBackend, getAI, getGenerativeModel } from "firebase/ai";
 
-// Firebase configuration object using environment variables
+// Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -11,23 +11,19 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
+// Auth
 const auth = getAuth(app);
 
-// Initialize Cloud Firestore and get a reference to the service
+// Firestore
 const db = getFirestore(app);
 
-// Initialize the Gemini Developer API backend service
+// Gemini AI
 const ai = getAI(app, { backend: new GoogleAIBackend() });
-
-// Create a `GenerativeModel` instance
-const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" }); // You can change the model as needed
-
+const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
 
 export { app, auth, db, model };
